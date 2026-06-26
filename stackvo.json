@@ -1,0 +1,43 @@
+{
+  "name": "laravel-meta-architecture",
+  "domain": "laravel-meta-architecture.loc",
+  "webserver": "nginx",
+  "document_root": "public",
+  "php": {
+    "version": "8.4",
+    "extensions": [
+      "mbstring",
+      "tokenizer",
+      "xml",
+      "ctype",
+      "json",
+      "openssl",
+      "pdo",
+      "pdo_mysql",
+      "pdo_pgsql",
+      "pdo_sqlite",
+      "fileinfo",
+      "curl",
+      "zip",
+      "gd",
+      "imagick",
+      "intl",
+      "sodium",
+      "bcmath",
+      "redis",
+      "opcache",
+      "memcached",
+      "swoole",
+      "imap",
+      "soap",
+      "dom",
+      "filter",
+      "hash",
+      "pcntl",
+      "session",
+      "xmlreader",
+      "xmlwriter",
+      "xdebug"
+    ]
+  }
+}
