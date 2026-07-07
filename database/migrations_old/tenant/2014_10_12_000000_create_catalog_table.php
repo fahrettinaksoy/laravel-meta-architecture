@@ -416,21 +416,6 @@ return new class extends Migration
 			$table->timestamp('date_modified', 0);
 			$table->timestamp('date_created', 0);
         });
-		/*
-        Schema::create('ctlg_product_variant_variable', function (Blueprint $table) {
-			$table->engine = 'InnoDB';
-			$table->charset = 'utf8';
-			$table->collation = 'utf8_general_ci';
-            $table->bigIncrements('product_stock_variant_id');
-			$table->index('product_id');
-			$table->integer('product_variant_stock_id')->default(0);
-			$table->integer('product_id')->default(0);
-			$table->integer('variant_id')->default(0);
-			$table->integer('variant_variable_id')->default(0);
-			$table->timestamp('date_modified', 0);
-			$table->timestamp('date_created', 0);
-        });
-		*/
 
         Schema::create('ctlg_product_grouped', function (Blueprint $table) {
 			$table->engine = 'InnoDB';

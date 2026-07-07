@@ -43,7 +43,7 @@ return new class extends Migration
             $table->string('trade_number', 50)->nullable()->comment('Ticaret sicil numarası');
             $table->string('mersis_number', 16)->nullable()->comment('MERSİS numarası (16 hane)');
             $table->string('kep_address', 254)->nullable()->comment('KEP (kayıtlı elektronik posta) adresi');
-            $table->string('phone', 20)->nullable()->comment('Telefon numarası (E.164 formatı önerilir)');
+            $table->string('phone_number', 20)->nullable()->comment('Telefon numarası (E.164 formatı önerilir)');
             $table->timestamp('sms_verified_at')->nullable()->comment('SMS doğrulama tarihi; null ise doğrulanmamış');
             $table->string('email', 254)->unique()->comment('E-posta adresi — benzersiz, giriş kimliği');
             $table->timestamp('email_verified_at')->nullable()->comment('E-posta doğrulama tarihi; null ise doğrulanmamış');
@@ -88,9 +88,9 @@ return new class extends Migration
             $table->date('birth_date')->nullable()->comment('Doğum tarihi');
             $table->string('title', 100)->nullable()->comment('Görev/unvan (örn. Satın Alma Müdürü)');
             $table->string('description')->nullable()->comment('Yetkili hakkında kısa açıklama');
-            $table->string('phone_fixed', 20)->nullable()->comment('Sabit telefon numarası');
-            $table->string('phone_mobile', 20)->nullable()->comment('Cep telefonu numarası');
-            $table->string('email', 254)->nullable()->unique()->comment('E-posta adresi — benzersiz; giriş kimliği olarak kullanılabilir');
+            $table->string('phone_fixed_number', 20)->nullable()->comment('Sabit telefon numarası');
+            $table->string('phone_mobile_number', 20)->nullable()->comment('Cep telefonu numarası');
+            $table->string('email_address', 254)->nullable()->unique()->comment('E-posta adresi — benzersiz; giriş kimliği olarak kullanılabilir');
             $table->boolean('status')->default(true)->comment('Kayıt durumu: true=aktif, false=pasif');
 
             $table->unsignedBigInteger('created_by')->nullable()->comment('Kaydı oluşturan kullanıcı kimliği');
@@ -122,8 +122,8 @@ return new class extends Migration
             $table->string('company')->nullable()->comment('Firma unvanı (kurumsal fatura adresi için)');
             $table->string('tax_office', 100)->nullable()->comment('Vergi dairesi adı');
             $table->string('tax_number', 11)->nullable()->comment('Vergi kimlik numarası');
-            $table->string('email', 254)->nullable()->comment('Adrese ait e-posta adresi');
-            $table->string('phone', 20)->nullable()->comment('Adrese ait telefon numarası');
+            $table->string('email_address', 254)->nullable()->comment('Adrese ait e-posta adresi');
+            $table->string('phone_number', 20)->nullable()->comment('Adrese ait telefon numarası');
             $table->string('address_1')->comment('Adres satırı 1 (cadde, sokak, bina)');
             $table->string('address_2')->nullable()->comment('Adres satırı 2 (daire, kat vb. ek bilgi)');
             $table->unsignedBigInteger('country_id')->nullable()->comment('Ülke kimliği (lokalizasyon tanım tablosuna referans)');
@@ -332,7 +332,7 @@ return new class extends Migration
 
             $table->bigIncrements('account_password_reset_id')->comment('Şifre sıfırlama isteği için otomatik artan birincil anahtar');
             $table->uuid('uuid')->unique()->comment('Dış sistemler ve API için benzersiz UUID kimliği');
-            $table->string('email', 254)->index()->comment('Sıfırlama istenen e-posta adresi');
+            $table->string('email_address', 254)->index()->comment('Sıfırlama istenen e-posta adresi');
             $table->string('token')->comment('Sıfırlama belirteci (hash olarak saklanmalı)');
             $table->timestamp('expires_at')->nullable()->comment('Belirtecin geçerlilik bitiş tarihi');
 
