@@ -49,7 +49,10 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable()->comment('E-posta doğrulama tarihi; null ise doğrulanmamış');
             $table->string('password')->nullable()->comment('Parola özeti (bcrypt/argon2); giriş yapmayan üyelerde null');
             $table->rememberToken()->comment('Beni hatırla oturum belirteci');
-            $table->boolean('has_safe')->default(false)->comment('Üye için kasa takibi yapılıyor mu?');
+            $table->boolean('has_ledger')->default(false)->comment('Üye için cari hesap (borç-alacak) takibi yapılıyor mu? Açık hesap çalışmanın ön koşulu');
+            $table->decimal('credit_limit', 15, 2)->default(0)->comment('Açık hesap risk limiti; 0 ise açık hesap satış yapılamaz');
+            $table->unsignedSmallInteger('payment_term_days')->default(0)->comment('Ödeme vadesi (gün); 0 ise peşin çalışılır');
+            $table->char('currency_code', 3)->default('TRY')->comment('Cari hesap ve kredi limitinin para birimi (ISO 4217: TRY, USD, EUR)');
             $table->boolean('newsletter')->default(false)->comment('E-bülten aboneliği var mı?');
             $table->boolean('status')->default(true)->comment('Kayıt durumu: true=aktif, false=pasif');
             $table->unsignedBigInteger('default_authorized_id')->nullable()->comment('Varsayılan yetkili kişi (mbr_account_authorized)');
