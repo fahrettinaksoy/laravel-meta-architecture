@@ -19,6 +19,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Repository Cache TTL
+    |--------------------------------------------------------------------------
+    |
+    | Time-to-live (in seconds) used by BaseRepositoryCache (HasCacheStrategy)
+    | and ValidateModule model-resolution caching.
+    |
+    */
+
+    'repository_ttl' => (int) env('CACHE_REPOSITORY_TTL', 3600),
+
+    /*
+    |--------------------------------------------------------------------------
     | Cache Stores
     |--------------------------------------------------------------------------
     |
