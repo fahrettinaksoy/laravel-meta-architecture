@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    protected $connection = 'conn_tnt';
+
     private const CATEGORY_TABLE = 'cnt_category';
     private const CATEGORY_TRANSLATION_TABLE = 'cnt_category_translation';
     private const POST_TABLE = 'cnt_post';
@@ -36,7 +38,7 @@ return new class extends Migration
             $table->string('image', 500)->nullable()->comment('Kategori görseli dosya yolu');
             $table->integer('sort_order')->default(0)->comment('Görüntüleme sıralaması');
             $table->boolean('membership')->default(false)->comment('Yalnızca üyelere açık mı?');
-            $table->unsignedBigInteger('layout_id')->nullable()->comment('Sayfa şablonu/düzeni kimliği (tanım tablosuna referans)');
+            $table->unsignedBigInteger('layout_id')->nullable()->comment('Sayfa şablonu/düzeni kimliği (site_layout tablosuna referans)');
             $table->boolean('status')->default(true)->comment('Kayıt durumu: true=aktif, false=pasif');
 
             $table->unsignedBigInteger('created_by')->nullable()->comment('Kaydı oluşturan kullanıcı kimliği');
@@ -94,7 +96,7 @@ return new class extends Migration
             $table->string('image', 500)->nullable()->comment('Kapak görseli dosya yolu');
             $table->unsignedBigInteger('viewed')->default(0)->comment('Görüntülenme sayısı');
             $table->integer('sort_order')->default(0)->comment('Görüntüleme sıralaması');
-            $table->unsignedBigInteger('layout_id')->nullable()->comment('Sayfa şablonu/düzeni kimliği (tanım tablosuna referans)');
+            $table->unsignedBigInteger('layout_id')->nullable()->comment('Sayfa şablonu/düzeni kimliği (site_layout tablosuna referans)');
             $table->boolean('membership')->default(false)->comment('Yalnızca üyelere açık mı?');
             $table->boolean('status')->default(true)->comment('Kayıt durumu: true=aktif, false=pasif');
 
@@ -303,7 +305,7 @@ return new class extends Migration
             $table->string('image', 500)->nullable()->comment('Sayfa görseli dosya yolu');
             $table->unsignedBigInteger('viewed')->default(0)->comment('Görüntülenme sayısı');
             $table->integer('sort_order')->default(0)->comment('Görüntüleme sıralaması');
-            $table->unsignedBigInteger('layout_id')->nullable()->comment('Sayfa şablonu/düzeni kimliği (tanım tablosuna referans)');
+            $table->unsignedBigInteger('layout_id')->nullable()->comment('Sayfa şablonu/düzeni kimliği (site_layout tablosuna referans)');
             $table->boolean('status')->default(true)->comment('Kayıt durumu: true=aktif, false=pasif');
 
             $table->unsignedBigInteger('created_by')->nullable()->comment('Kaydı oluşturan kullanıcı kimliği');

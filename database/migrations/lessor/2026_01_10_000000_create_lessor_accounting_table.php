@@ -6,14 +6,11 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    protected $connection = 'conn_tnt';
+    protected $connection = 'conn_lsr';
 
     private const CASH_TABLE = 'acct_cash';
     private const CASH_BANK_TABLE = 'acct_cash_bank';
     private const CASH_ACTIVITY_TABLE = 'acct_cash_activity';
-    private const LOAN_TABLE = 'acct_loan';
-    private const CHEQUE_TABLE = 'acct_cheque';
-    private const PROMISSORY_TABLE = 'acct_promissory';
     private const EMPLOYEE_TABLE = 'acct_employee';
     private const EMPLOYEE_SALARY_TABLE = 'acct_employee_salary';
     private const EMPLOYEE_CONTACT_TABLE = 'acct_employee_contact';
@@ -127,108 +124,6 @@ return new class extends Migration
             $table->index(['module_group_id', 'module_type_id', 'module_id'], 'idx_cash_activity_module');
 
             $table->foreign('cash_id')->references('cash_id')->on(self::CASH_TABLE)->cascadeOnDelete();
-        });
-
-        Schema::create(self::LOAN_TABLE, function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->charset = 'utf8mb4';
-            $table->collation = 'utf8mb4_unicode_ci';
-            $table->comment('Kredi/borç kayıtları: banka kredileri ve taksitli borç takibi');
-
-            $table->bigIncrements('loan_id')->comment('Kredi için otomatik artan birincil anahtar');
-            $table->uuid('uuid')->unique()->comment('Dış sistemler ve API için benzersiz UUID kimliği');
-            $table->unsignedBigInteger('type_id')->nullable()->comment('Kredi türü kimliği (def_acct_loan_type tablosuna referans)');
-            $table->unsignedBigInteger('account_id')->nullable()->comment('İlişkili cari hesap kimliği (mbr_account; FK üyelik modülünde eklenir)');
-            $table->unsignedBigInteger('module_group_id')->nullable()->comment('İlişkili modül grubu kimliği (polimorfik kaynak)');
-            $table->unsignedBigInteger('module_type_id')->nullable()->comment('İlişkili modül türü kimliği (polimorfik kaynak)');
-            $table->unsignedBigInteger('module_id')->nullable()->comment('İlişkili modül kayıt kimliği (polimorfik kaynak)');
-            $table->string('code', 64)->nullable()->comment('Kredi/sözleşme kodu');
-            $table->string('name')->comment('Kredi adı (örn. Taşıt Kredisi)');
-            $table->string('description')->nullable()->comment('Kredi açıklaması');
-            $table->char('currency_code', 3)->default('TRY')->comment('Kredi para birimi (ISO 4217: TRY, USD, EUR)');
-            $table->decimal('amount', 19, 2)->default(0)->comment('Kredi/taksit tutarı');
-            $table->boolean('status')->default(true)->comment('Kayıt durumu: true=aktif, false=pasif');
-            $table->timestamp('date_due')->nullable()->comment('Vade/son ödeme tarihi');
-
-            $table->unsignedBigInteger('created_by')->nullable()->comment('Kaydı oluşturan kullanıcı kimliği');
-            $table->unsignedBigInteger('updated_by')->nullable()->comment('Kaydı son güncelleyen kullanıcı kimliği');
-            $table->unsignedBigInteger('deleted_by')->nullable()->comment('Kaydı silen kullanıcı kimliği');
-            $table->timestamp('created_at')->useCurrent()->comment('Kayıt oluşturulma tarihi');
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Kayıt son güncelleme tarihi');
-            $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
-
-            $table->index('type_id');
-            $table->index('account_id');
-            $table->index('status');
-        });
-
-        Schema::create(self::CHEQUE_TABLE, function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->charset = 'utf8mb4';
-            $table->collation = 'utf8mb4_unicode_ci';
-            $table->comment('Çek kayıtları: alınan ve verilen çeklerin takibi');
-
-            $table->bigIncrements('cheque_id')->comment('Çek için otomatik artan birincil anahtar');
-            $table->uuid('uuid')->unique()->comment('Dış sistemler ve API için benzersiz UUID kimliği');
-            $table->unsignedBigInteger('type_id')->nullable()->comment('Çek türü kimliği: alınan/verilen çek (def_acct_cheque_type tablosuna referans)');
-            $table->unsignedBigInteger('account_id')->nullable()->comment('İlişkili cari hesap kimliği (mbr_account; FK üyelik modülünde eklenir)');
-            $table->unsignedBigInteger('bank_id')->nullable()->comment('Çekin ait olduğu banka kimliği (def_gen_bank tablosuna referans)');
-            $table->string('bank_account_number', 30)->nullable()->comment('İlgili banka hesap numarası');
-            $table->string('cheque_number', 50)->nullable()->comment('Çek numarası');
-            $table->string('code', 64)->nullable()->comment('Çek takip kodu');
-            $table->string('drawer', 150)->nullable()->comment('Keşideci: çeki düzenleyen kişi/firma');
-            $table->string('name')->nullable()->comment('Çek başlığı');
-            $table->string('description')->nullable()->comment('Çek açıklaması');
-            $table->char('currency_code', 3)->default('TRY')->comment('Para birimi (ISO 4217: TRY, USD, EUR)');
-            $table->decimal('amount', 19, 2)->default(0)->comment('Çek tutarı');
-            $table->date('date_delivery')->nullable()->comment('Keşide/teslim tarihi');
-            $table->date('date_expiry')->nullable()->comment('Vade tarihi');
-            $table->boolean('status')->default(true)->comment('Kayıt durumu: true=aktif, false=pasif');
-
-            $table->unsignedBigInteger('created_by')->nullable()->comment('Kaydı oluşturan kullanıcı kimliği');
-            $table->unsignedBigInteger('updated_by')->nullable()->comment('Kaydı son güncelleyen kullanıcı kimliği');
-            $table->unsignedBigInteger('deleted_by')->nullable()->comment('Kaydı silen kullanıcı kimliği');
-            $table->timestamp('created_at')->useCurrent()->comment('Kayıt oluşturulma tarihi');
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Kayıt son güncelleme tarihi');
-            $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
-
-            $table->index('type_id');
-            $table->index('account_id');
-            $table->index('bank_id');
-        });
-
-        Schema::create(self::PROMISSORY_TABLE, function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->charset = 'utf8mb4';
-            $table->collation = 'utf8mb4_unicode_ci';
-            $table->comment('Senet kayıtları: alınan (alacak) ve verilen (borç) senetlerin takibi');
-
-            $table->bigIncrements('promissory_id')->comment('Senet için otomatik artan birincil anahtar');
-            $table->uuid('uuid')->unique()->comment('Dış sistemler ve API için benzersiz UUID kimliği');
-            $table->unsignedBigInteger('type_id')->nullable()->comment('Senet türü kimliği: alacak/borç senedi (tanım tablosuna referans)');
-            $table->unsignedBigInteger('account_id')->nullable()->comment('İlişkili cari hesap kimliği (mbr_account; FK üyelik modülünde eklenir)');
-            $table->string('note_number', 50)->nullable()->comment('Senet/bono numarası');
-            $table->string('code', 64)->nullable()->comment('Senet takip kodu');
-            $table->string('drawer', 150)->nullable()->comment('Keşideci/borçlu: senedi düzenleyen kişi/firma');
-            $table->string('payee', 150)->nullable()->comment('Lehtar: senedin ödeneceği kişi/firma');
-            $table->string('name')->nullable()->comment('Senet başlığı');
-            $table->string('description')->nullable()->comment('Senet açıklaması');
-            $table->char('currency_code', 3)->default('TRY')->comment('Para birimi (ISO 4217: TRY, USD, EUR)');
-            $table->decimal('amount', 19, 2)->default(0)->comment('Senet tutarı');
-            $table->string('issue_place', 150)->nullable()->comment('Düzenleme yeri');
-            $table->date('date_issue')->nullable()->comment('Düzenleme (tanzim) tarihi');
-            $table->date('date_expiry')->nullable()->comment('Vade tarihi');
-            $table->boolean('status')->default(true)->comment('Kayıt durumu: true=aktif, false=pasif');
-
-            $table->unsignedBigInteger('created_by')->nullable()->comment('Kaydı oluşturan kullanıcı kimliği');
-            $table->unsignedBigInteger('updated_by')->nullable()->comment('Kaydı son güncelleyen kullanıcı kimliği');
-            $table->unsignedBigInteger('deleted_by')->nullable()->comment('Kaydı silen kullanıcı kimliği');
-            $table->timestamp('created_at')->useCurrent()->comment('Kayıt oluşturulma tarihi');
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Kayıt son güncelleme tarihi');
-            $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
-
-            $table->index('type_id');
-            $table->index('account_id');
         });
 
         Schema::create(self::EMPLOYEE_TABLE, function (Blueprint $table) {
@@ -954,9 +849,6 @@ return new class extends Migration
         Schema::dropIfExists(self::EMPLOYEE_CONTACT_TABLE);
         Schema::dropIfExists(self::EMPLOYEE_SALARY_TABLE);
         Schema::dropIfExists(self::EMPLOYEE_TABLE);
-        Schema::dropIfExists(self::PROMISSORY_TABLE);
-        Schema::dropIfExists(self::CHEQUE_TABLE);
-        Schema::dropIfExists(self::LOAN_TABLE);
         Schema::dropIfExists(self::CASH_ACTIVITY_TABLE);
         Schema::dropIfExists(self::CASH_BANK_TABLE);
         Schema::dropIfExists(self::CASH_TABLE);
