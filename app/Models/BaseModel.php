@@ -10,13 +10,15 @@ use App\Traits\HasFieldMetadata;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 abstract class BaseModel extends Model
 {
     use HasFactory;
     use HasFieldMetadata;
-    use SoftDeletes;
+
+    // SoftDeletes artık opt-in'dir: deleted_at kolonu olan modeller kendi sınıfında
+    // `use SoftDeletes;` ekler (örn. def_cat_* tanım modelleri). deleted_at içermeyen
+    // tablolar (katalog cat_* ve append-only ledger) trait kullanmaz.
 
     protected $connection = 'conn_lsr';
 
