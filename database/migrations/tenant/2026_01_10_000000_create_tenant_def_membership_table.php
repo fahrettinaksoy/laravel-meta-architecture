@@ -61,8 +61,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['account_type_id', 'language_code'], 'uq_account_type_translation_lang');
-
-            $table->foreign('account_type_id')->references('account_type_id')->on(self::ACCOUNT_TYPE_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::ACCOUNT_GROUP_TABLE, function (Blueprint $table) {
@@ -110,8 +108,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['account_group_id', 'language_code'], 'uq_account_group_translation_lang');
-
-            $table->foreign('account_group_id')->references('account_group_id')->on(self::ACCOUNT_GROUP_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::ACCOUNT_AUTHORIZED_GROUP_TABLE, function (Blueprint $table) {
@@ -158,8 +154,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['account_authorized_group_id', 'language_code'], 'uq_account_authorized_group_translation_lang');
-
-            $table->foreign('account_authorized_group_id')->references('account_authorized_group_id')->on(self::ACCOUNT_AUTHORIZED_GROUP_TABLE)->cascadeOnDelete();
         });
     }
 

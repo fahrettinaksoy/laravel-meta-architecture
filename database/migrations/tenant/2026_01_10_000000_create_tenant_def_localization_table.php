@@ -144,8 +144,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('status');
-
-            $table->foreign('country_id')->references('country_id')->on(self::COUNTRY_TABLE)->cascadeOnDelete();
+            $table->index('country_id');
         });
 
         Schema::create(self::DISTRICT_TABLE, function (Blueprint $table) {
@@ -169,8 +168,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('status');
-
-            $table->foreign('city_id')->references('city_id')->on(self::CITY_TABLE)->cascadeOnDelete();
+            $table->index('city_id');
         });
 
         Schema::create(self::GEO_TABLE, function (Blueprint $table) {
@@ -219,11 +217,7 @@ return new class extends Migration
             $table->index('country_id');
             $table->index('city_id');
             $table->index('district_id');
-
-            $table->foreign('geo_id')->references('geo_id')->on(self::GEO_TABLE)->cascadeOnDelete();
-            $table->foreign('country_id')->references('country_id')->on(self::COUNTRY_TABLE)->cascadeOnDelete();
-            $table->foreign('city_id')->references('city_id')->on(self::CITY_TABLE)->cascadeOnDelete();
-            $table->foreign('district_id')->references('district_id')->on(self::DISTRICT_TABLE)->cascadeOnDelete();
+            $table->index('geo_id');
         });
 
         Schema::create(self::LENGTH_CLASS_TABLE, function (Blueprint $table) {
@@ -269,8 +263,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['length_class_id', 'language_code'], 'uq_length_class_translation_lang');
-
-            $table->foreign('length_class_id')->references('length_class_id')->on(self::LENGTH_CLASS_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::WEIGHT_CLASS_TABLE, function (Blueprint $table) {
@@ -316,8 +308,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['weight_class_id', 'language_code'], 'uq_weight_class_translation_lang');
-
-            $table->foreign('weight_class_id')->references('weight_class_id')->on(self::WEIGHT_CLASS_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::UNIT_TABLE, function (Blueprint $table) {
@@ -363,8 +353,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['unit_id', 'language_code'], 'uq_unit_translation_lang');
-
-            $table->foreign('unit_id')->references('unit_id')->on(self::UNIT_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::TAX_CLASS_TABLE, function (Blueprint $table) {
@@ -390,8 +378,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('status');
-
-            $table->foreign('geo_id')->references('geo_id')->on(self::GEO_TABLE)->nullOnDelete();
+            $table->index('geo_id');
         });
 
         Schema::create(self::TAX_CLASS_TRANSLATION_TABLE, function (Blueprint $table) {
@@ -416,8 +403,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['tax_class_id', 'language_code'], 'uq_tax_class_translation_lang');
-
-            $table->foreign('tax_class_id')->references('tax_class_id')->on(self::TAX_CLASS_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::TAX_CLASS_ACCOUNT_TYPE_TABLE, function (Blueprint $table) {
@@ -440,8 +425,6 @@ return new class extends Migration
 
             $table->unique(['tax_class_id', 'account_type_id'], 'uq_tax_class_account_type');
             $table->index('account_type_id');
-
-            $table->foreign('tax_class_id')->references('tax_class_id')->on(self::TAX_CLASS_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::TAX_RATE_TABLE, function (Blueprint $table) {
@@ -467,8 +450,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('status');
-
-            $table->foreign('geo_id')->references('geo_id')->on(self::GEO_TABLE)->nullOnDelete();
+            $table->index('geo_id');
         });
 
         Schema::create(self::TAX_RATE_ACCOUNT_GROUP_TABLE, function (Blueprint $table) {
@@ -491,8 +473,6 @@ return new class extends Migration
 
             $table->unique(['tax_rate_id', 'account_group_id'], 'uq_tax_rate_account_group');
             $table->index('account_group_id');
-
-            $table->foreign('tax_rate_id')->references('tax_rate_id')->on(self::TAX_RATE_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::ADDRESS_TYPE_TABLE, function (Blueprint $table) {
@@ -538,8 +518,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['address_type_id', 'language_code'], 'uq_address_type_translation_lang');
-
-            $table->foreign('address_type_id')->references('address_type_id')->on(self::ADDRESS_TYPE_TABLE)->cascadeOnDelete();
         });
     }
 

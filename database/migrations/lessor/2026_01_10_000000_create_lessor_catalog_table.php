@@ -157,8 +157,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['product_id', 'language_code'], 'uq_product_translation_lang');
-
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::PRODUCT_ACCOUNT_PRICE_TABLE, function (Blueprint $table) {
@@ -188,8 +186,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('account_type_id');
-
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
+            $table->index('product_id');
         });
 
         Schema::create(self::PRODUCT_VARIANT_TABLE, function (Blueprint $table) {
@@ -213,8 +210,6 @@ return new class extends Migration
 
             $table->unique(['product_id', 'variant_id'], 'uq_product_variant');
             $table->index('variant_id');
-
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::PRODUCT_VARIANT_STOCK_TABLE, function (Blueprint $table) {
@@ -243,8 +238,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('sku');
-
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
+            $table->index('product_id');
         });
 
         Schema::create(self::PRODUCT_VARIANT_VARIABLE_TABLE, function (Blueprint $table) {
@@ -269,9 +263,8 @@ return new class extends Migration
 
             $table->index('variant_id');
             $table->index('variant_variable_id');
-
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
-            $table->foreign('product_variant_stock_id')->references('product_variant_stock_id')->on(self::PRODUCT_VARIANT_STOCK_TABLE)->cascadeOnDelete();
+            $table->index('product_id');
+            $table->index('product_variant_stock_id');
         });
 
         Schema::create(self::PRODUCT_ACTIVITY_TABLE, function (Blueprint $table) {
@@ -310,9 +303,8 @@ return new class extends Migration
             $table->index('module_id');
             $table->index('entry_id');
             $table->index('warehouse_id');
-
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
-            $table->foreign('product_variant_stock_id')->references('product_variant_stock_id')->on(self::PRODUCT_VARIANT_STOCK_TABLE)->nullOnDelete();
+            $table->index('product_id');
+            $table->index('product_variant_stock_id');
         });
 
         Schema::create(self::PRODUCT_REWARD_TABLE, function (Blueprint $table) {
@@ -336,8 +328,6 @@ return new class extends Migration
 
             $table->unique(['product_id', 'account_group_id'], 'uq_product_reward_group');
             $table->index('account_group_id');
-
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::PRODUCT_IMAGE_TABLE, function (Blueprint $table) {
@@ -361,8 +351,8 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Kayıt son güncelleme tarihi');
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
-            $table->foreign('product_variant_stock_id')->references('product_variant_stock_id')->on(self::PRODUCT_VARIANT_STOCK_TABLE)->nullOnDelete();
+            $table->index('product_id');
+            $table->index('product_variant_stock_id');
         });
 
         Schema::create(self::PRODUCT_VIDEO_TABLE, function (Blueprint $table) {
@@ -386,7 +376,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Kayıt son güncelleme tarihi');
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
+            $table->index('product_id');
         });
 
         Schema::create(self::PRODUCT_RELATED_TABLE, function (Blueprint $table) {
@@ -409,9 +399,6 @@ return new class extends Migration
 
             $table->unique(['product_id', 'related_product_id'], 'uq_product_related');
             $table->index('related_product_id');
-
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
-            $table->foreign('related_product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::PRODUCT_ACCESSORY_TABLE, function (Blueprint $table) {
@@ -434,9 +421,6 @@ return new class extends Migration
 
             $table->unique(['product_id', 'accessory_product_id'], 'uq_product_accessory');
             $table->index('accessory_product_id');
-
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
-            $table->foreign('accessory_product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::PRODUCT_FAQ_TABLE, function (Blueprint $table) {
@@ -459,8 +443,6 @@ return new class extends Migration
 
             $table->unique(['product_id', 'faq_id'], 'uq_product_faq');
             $table->index('faq_id');
-
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::PRODUCT_ATTRIBUTE_TABLE, function (Blueprint $table) {
@@ -482,8 +464,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('attribute_variable_id');
-
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
+            $table->index('product_id');
         });
 
         Schema::create(self::PRODUCT_ATTRIBUTE_TRANSLATION_TABLE, function (Blueprint $table) {
@@ -506,8 +487,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['product_attribute_id', 'language_code'], 'uq_product_attribute_translation_lang');
-
-            $table->foreign('product_attribute_id')->references('product_attribute_id')->on(self::PRODUCT_ATTRIBUTE_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::PRODUCT_FIELD_TABLE, function (Blueprint $table) {
@@ -531,8 +510,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('field_type_id');
-
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
+            $table->index('product_id');
         });
 
         Schema::create(self::PRODUCT_FIELD_TRANSLATION_TABLE, function (Blueprint $table) {
@@ -556,8 +534,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['product_field_id', 'language_code'], 'uq_product_field_translation_lang');
-
-            $table->foreign('product_field_id')->references('product_field_id')->on(self::PRODUCT_FIELD_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::PRODUCT_FILTER_VALUE_TABLE, function (Blueprint $table) {
@@ -580,8 +556,6 @@ return new class extends Migration
 
             $table->unique(['product_id', 'filter_value_id'], 'uq_product_filter_value');
             $table->index('filter_value_id');
-
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::PRODUCT_OPTION_TABLE, function (Blueprint $table) {
@@ -606,8 +580,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('option_id');
-
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
+            $table->index('product_id');
         });
 
         Schema::create(self::PRODUCT_OPTION_VALUE_TABLE, function (Blueprint $table) {
@@ -643,9 +616,8 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('option_value_id');
-
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
-            $table->foreign('product_option_id')->references('product_option_id')->on(self::PRODUCT_OPTION_TABLE)->cascadeOnDelete();
+            $table->index('product_id');
+            $table->index('product_option_id');
         });
 
         Schema::create(self::PRODUCT_GROUPED_TABLE, function (Blueprint $table) {
@@ -673,9 +645,6 @@ return new class extends Migration
 
             $table->unique(['product_id', 'grouped_product_id'], 'uq_product_grouped');
             $table->index('grouped_product_id');
-
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
-            $table->foreign('grouped_product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::PRODUCT_BUNDLE_TABLE, function (Blueprint $table) {
@@ -700,9 +669,6 @@ return new class extends Migration
 
             $table->unique(['product_id', 'bundle_product_id'], 'uq_product_bundle');
             $table->index('bundle_product_id');
-
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
-            $table->foreign('bundle_product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::PRODUCT_RECURRING_TABLE, function (Blueprint $table) {
@@ -728,8 +694,6 @@ return new class extends Migration
             $table->unique(['product_id', 'recurring_type_id', 'account_type_id'], 'uq_product_recurring');
             $table->index('recurring_type_id');
             $table->index('account_type_id');
-
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::PRODUCT_DOCUMENT_TABLE, function (Blueprint $table) {
@@ -756,7 +720,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Kayıt son güncelleme tarihi');
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
-            $table->foreign('product_id')->references('product_id')->on(self::PRODUCT_TABLE)->cascadeOnDelete();
+            $table->index('product_id');
         });
 
         Schema::create(self::PRODUCT_DOCUMENT_TRANSLATION_TABLE, function (Blueprint $table) {
@@ -781,21 +745,12 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['product_document_id', 'language_code'], 'uq_product_document_translation_lang');
-
-            $table->foreign('product_document_id')->references('product_document_id')->on(self::PRODUCT_DOCUMENT_TABLE)->cascadeOnDelete();
         });
 
-        Schema::table(self::PRODUCT_TABLE, function (Blueprint $table) {
-            $table->foreign('default_variant_stock_id')->references('product_variant_stock_id')->on(self::PRODUCT_VARIANT_STOCK_TABLE)->nullOnDelete();
-        });
     }
 
     public function down(): void
     {
-        Schema::table(self::PRODUCT_TABLE, function (Blueprint $table) {
-            $table->dropForeign(['default_variant_stock_id']);
-        });
-
         Schema::dropIfExists(self::PRODUCT_DOCUMENT_TRANSLATION_TABLE);
         Schema::dropIfExists(self::PRODUCT_DOCUMENT_TABLE);
         Schema::dropIfExists(self::PRODUCT_RECURRING_TABLE);

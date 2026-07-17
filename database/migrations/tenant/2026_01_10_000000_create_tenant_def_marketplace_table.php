@@ -59,8 +59,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['channel_type_id', 'language_code'], 'uq_channel_type_translation_lang');
-
-            $table->foreign('channel_type_id')->references('channel_type_id')->on(self::CHANNEL_TYPE_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::CHANNEL_SERVICE_TABLE, function (Blueprint $table) {
@@ -107,8 +105,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['channel_service_id', 'language_code'], 'uq_channel_service_translation_lang');
-
-            $table->foreign('channel_service_id')->references('channel_service_id')->on(self::CHANNEL_SERVICE_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::CHANNEL_CATEGORY_TABLE, function (Blueprint $table) {
@@ -138,8 +134,6 @@ return new class extends Migration
 
             $table->index(['channel_type_id', 'remote_id'], 'idx_channel_category_remote');
             $table->index('remote_parent_id');
-
-            $table->foreign('channel_type_id')->references('channel_type_id')->on(self::CHANNEL_TYPE_TABLE)->nullOnDelete();
         });
     }
 

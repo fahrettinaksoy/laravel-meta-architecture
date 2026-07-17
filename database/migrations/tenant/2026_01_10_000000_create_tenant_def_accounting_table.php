@@ -16,24 +16,31 @@ return new class extends Migration
     private const CASH_MODULE_GROUP_TRANSLATION_TABLE = 'def_acct_cash_module_group_translation';
     private const CASH_MODULE_TYPE_TABLE = 'def_acct_cash_module_type';
     private const CASH_MODULE_TYPE_TRANSLATION_TABLE = 'def_acct_cash_module_type_translation';
+
     private const LOAN_TYPE_TABLE = 'def_acct_loan_type';
     private const LOAN_TYPE_TRANSLATION_TABLE = 'def_acct_loan_type_translation';
+
     private const ORDER_GROUP_TABLE = 'def_acct_order_group';
     private const ORDER_GROUP_TRANSLATION_TABLE = 'def_acct_order_group_translation';
+
     private const INVOICE_TYPE_TABLE = 'def_acct_invoice_type';
     private const INVOICE_TYPE_TRANSLATION_TABLE = 'def_acct_invoice_type_translation';
     private const INVOICE_GROUP_TABLE = 'def_acct_invoice_group';
     private const INVOICE_GROUP_TRANSLATION_TABLE = 'def_acct_invoice_group_translation';
     private const INVOICE_RELATION_TABLE = 'def_acct_invoice_relation';
     private const INVOICE_RELATION_TRANSLATION_TABLE = 'def_acct_invoice_relation_translation';
+
     private const CHEQUE_TYPE_TABLE = 'def_acct_cheque_type';
     private const CHEQUE_TYPE_TRANSLATION_TABLE = 'def_acct_cheque_type_translation';
+
     private const ORDER_OPERATION_TABLE = 'def_acct_order_operation';
     private const ORDER_OPERATION_TRANSLATION_TABLE = 'def_acct_order_operation_translation';
     private const ORDER_STATUS_TABLE = 'def_acct_order_status';
     private const ORDER_STATUS_TRANSLATION_TABLE = 'def_acct_order_status_translation';
+
     private const INVOICE_CATEGORY_TABLE = 'def_acct_invoice_category';
     private const INVOICE_CATEGORY_TRANSLATION_TABLE = 'def_acct_invoice_category_translation';
+
     private const REFUND_STATUS_TABLE = 'def_acct_refund_status';
     private const REFUND_STATUS_TRANSLATION_TABLE = 'def_acct_refund_status_translation';
     private const REFUND_ACTION_TABLE = 'def_acct_refund_action';
@@ -87,8 +94,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['order_operation_id', 'language_code'], 'uq_order_operation_translation_lang');
-
-            $table->foreign('order_operation_id')->references('order_operation_id')->on(self::ORDER_OPERATION_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::ORDER_STATUS_TABLE, function (Blueprint $table) {
@@ -113,8 +118,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('status');
-
-            $table->foreign('order_operation_id')->references('order_operation_id')->on(self::ORDER_OPERATION_TABLE)->nullOnDelete();
+            $table->index('order_operation_id');
         });
 
         Schema::create(self::ORDER_STATUS_TRANSLATION_TABLE, function (Blueprint $table) {
@@ -138,8 +142,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['order_status_id', 'language_code'], 'uq_order_status_translation_lang');
-
-            $table->foreign('order_status_id')->references('order_status_id')->on(self::ORDER_STATUS_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::INVOICE_CATEGORY_TABLE, function (Blueprint $table) {
@@ -165,8 +167,6 @@ return new class extends Migration
 
             $table->index('parent_id');
             $table->index('status');
-
-            $table->foreign('parent_id')->references('invoice_category_id')->on(self::INVOICE_CATEGORY_TABLE)->nullOnDelete();
         });
 
         Schema::create(self::INVOICE_CATEGORY_TRANSLATION_TABLE, function (Blueprint $table) {
@@ -190,8 +190,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['invoice_category_id', 'language_code'], 'uq_invoice_category_translation_lang');
-
-            $table->foreign('invoice_category_id')->references('invoice_category_id')->on(self::INVOICE_CATEGORY_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::REFUND_STATUS_TABLE, function (Blueprint $table) {
@@ -238,8 +236,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['refund_status_id', 'language_code'], 'uq_refund_status_translation_lang');
-
-            $table->foreign('refund_status_id')->references('refund_status_id')->on(self::REFUND_STATUS_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::REFUND_ACTION_TABLE, function (Blueprint $table) {
@@ -286,8 +282,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['refund_action_id', 'language_code'], 'uq_refund_action_translation_lang');
-
-            $table->foreign('refund_action_id')->references('refund_action_id')->on(self::REFUND_ACTION_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::REFUND_REASON_TABLE, function (Blueprint $table) {
@@ -334,8 +328,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['refund_reason_id', 'language_code'], 'uq_refund_reason_translation_lang');
-
-            $table->foreign('refund_reason_id')->references('refund_reason_id')->on(self::REFUND_REASON_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::CASH_TYPE_TABLE, function (Blueprint $table) {
@@ -383,8 +375,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['cash_type_id', 'language_code'], 'uq_cash_type_translation_lang');
-
-            $table->foreign('cash_type_id')->references('cash_type_id')->on(self::CASH_TYPE_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::CASH_PROCESS_TABLE, function (Blueprint $table) {
@@ -432,8 +422,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['cash_process_id', 'language_code'], 'uq_cash_process_translation_lang');
-
-            $table->foreign('cash_process_id')->references('cash_process_id')->on(self::CASH_PROCESS_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::CASH_MODULE_GROUP_TABLE, function (Blueprint $table) {
@@ -481,8 +469,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['cash_module_group_id', 'language_code'], 'uq_cash_module_group_translation_lang');
-
-            $table->foreign('cash_module_group_id')->references('cash_module_group_id')->on(self::CASH_MODULE_GROUP_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::CASH_MODULE_TYPE_TABLE, function (Blueprint $table) {
@@ -511,9 +497,8 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('status');
-
-            $table->foreign('cash_process_id')->references('cash_process_id')->on(self::CASH_PROCESS_TABLE)->nullOnDelete();
-            $table->foreign('cash_module_group_id')->references('cash_module_group_id')->on(self::CASH_MODULE_GROUP_TABLE)->nullOnDelete();
+            $table->index('cash_process_id');
+            $table->index('cash_module_group_id');
         });
 
         Schema::create(self::CASH_MODULE_TYPE_TRANSLATION_TABLE, function (Blueprint $table) {
@@ -537,8 +522,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['cash_module_type_id', 'language_code'], 'uq_cash_module_type_translation_lang');
-
-            $table->foreign('cash_module_type_id')->references('cash_module_type_id')->on(self::CASH_MODULE_TYPE_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::LOAN_TYPE_TABLE, function (Blueprint $table) {
@@ -586,8 +569,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['loan_type_id', 'language_code'], 'uq_loan_type_translation_lang');
-
-            $table->foreign('loan_type_id')->references('loan_type_id')->on(self::LOAN_TYPE_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::ORDER_GROUP_TABLE, function (Blueprint $table) {
@@ -634,8 +615,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['order_group_id', 'language_code'], 'uq_order_group_translation_lang');
-
-            $table->foreign('order_group_id')->references('order_group_id')->on(self::ORDER_GROUP_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::INVOICE_TYPE_TABLE, function (Blueprint $table) {
@@ -682,8 +661,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['invoice_type_id', 'language_code'], 'uq_invoice_type_translation_lang');
-
-            $table->foreign('invoice_type_id')->references('invoice_type_id')->on(self::INVOICE_TYPE_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::INVOICE_GROUP_TABLE, function (Blueprint $table) {
@@ -730,8 +707,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['invoice_group_id', 'language_code'], 'uq_invoice_group_translation_lang');
-
-            $table->foreign('invoice_group_id')->references('invoice_group_id')->on(self::INVOICE_GROUP_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::INVOICE_RELATION_TABLE, function (Blueprint $table) {
@@ -777,8 +752,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['invoice_relation_id', 'language_code'], 'uq_invoice_relation_translation_lang');
-
-            $table->foreign('invoice_relation_id')->references('invoice_relation_id')->on(self::INVOICE_RELATION_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::CHEQUE_TYPE_TABLE, function (Blueprint $table) {
@@ -826,8 +799,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['cheque_type_id', 'language_code'], 'uq_cheque_type_translation_lang');
-
-            $table->foreign('cheque_type_id')->references('cheque_type_id')->on(self::CHEQUE_TYPE_TABLE)->cascadeOnDelete();
         });
     }
 

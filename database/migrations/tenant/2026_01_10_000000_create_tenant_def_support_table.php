@@ -63,8 +63,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['ticket_status_id', 'language_code'], 'uq_ticket_status_translation_lang');
-
-            $table->foreign('ticket_status_id')->references('ticket_status_id')->on(self::TICKET_STATUS_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::FEEDBACK_STATUS_TABLE, function (Blueprint $table) {
@@ -111,8 +109,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['feedback_status_id', 'language_code'], 'uq_feedback_status_translation_lang');
-
-            $table->foreign('feedback_status_id')->references('feedback_status_id')->on(self::FEEDBACK_STATUS_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::PRIORITY_TABLE, function (Blueprint $table) {
@@ -159,8 +155,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['priority_id', 'language_code'], 'uq_priority_translation_lang');
-
-            $table->foreign('priority_id')->references('priority_id')->on(self::PRIORITY_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::RELATION_TABLE, function (Blueprint $table) {
@@ -207,8 +201,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['relation_id', 'language_code'], 'uq_sup_relation_translation_lang');
-
-            $table->foreign('relation_id')->references('relation_id')->on(self::RELATION_TABLE)->cascadeOnDelete();
         });
     }
 

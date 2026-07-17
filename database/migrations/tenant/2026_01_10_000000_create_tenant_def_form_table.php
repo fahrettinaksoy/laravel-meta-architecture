@@ -57,8 +57,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['form_element_id', 'language_code'], 'uq_form_element_translation_lang');
-
-            $table->foreign('form_element_id')->references('form_element_id')->on(self::FORM_ELEMENT_TABLE)->cascadeOnDelete();
         });
     }
 

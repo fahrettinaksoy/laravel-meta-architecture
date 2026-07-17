@@ -11,12 +11,15 @@ return new class extends Migration
     private const CASH_TABLE = 'acct_cash';
     private const CASH_BANK_TABLE = 'acct_cash_bank';
     private const CASH_ACTIVITY_TABLE = 'acct_cash_activity';
+
     private const EMPLOYEE_TABLE = 'acct_employee';
     private const EMPLOYEE_SALARY_TABLE = 'acct_employee_salary';
     private const EMPLOYEE_CONTACT_TABLE = 'acct_employee_contact';
     private const EMPLOYEE_BANK_ACCOUNT_TABLE = 'acct_employee_bank_account';
     private const EMPLOYEE_DOCUMENT_TABLE = 'acct_employee_document';
+
     private const CART_TABLE = 'acct_cart';
+
     private const ORDER_TABLE = 'acct_order';
     private const ORDER_ITEM_TABLE = 'acct_order_item';
     private const ORDER_FINANCIAL_TABLE = 'acct_order_financial';
@@ -24,12 +27,16 @@ return new class extends Migration
     private const ORDER_ACTIVITY_TABLE = 'acct_order_activity';
     private const ORDER_SHIPMENT_TABLE = 'acct_order_shipment';
     private const ORDER_SHIPMENT_ITEM_TABLE = 'acct_order_shipment_item';
+
     private const INVOICE_TABLE = 'acct_invoice';
     private const INVOICE_ITEM_TABLE = 'acct_invoice_item';
     private const INVOICE_FINANCIAL_TABLE = 'acct_invoice_financial';
     private const INVOICE_CONTACT_TABLE = 'acct_invoice_contact';
+
     private const REFUND_TABLE = 'acct_refund';
+
     private const RECURRING_TABLE = 'acct_recurring';
+
     private const DEMAND_TABLE = 'acct_demand';
 
     public function up(): void
@@ -86,8 +93,7 @@ return new class extends Migration
 
             $table->index('bank_id');
             $table->index('iban');
-
-            $table->foreign('cash_id')->references('cash_id')->on(self::CASH_TABLE)->cascadeOnDelete();
+            $table->index('cash_id');
         });
 
         Schema::create(self::CASH_ACTIVITY_TABLE, function (Blueprint $table) {
@@ -122,8 +128,7 @@ return new class extends Migration
             $table->index('account_id');
             $table->index('branch_id');
             $table->index(['module_group_id', 'module_type_id', 'module_id'], 'idx_cash_activity_module');
-
-            $table->foreign('cash_id')->references('cash_id')->on(self::CASH_TABLE)->cascadeOnDelete();
+            $table->index('cash_id');
         });
 
         Schema::create(self::EMPLOYEE_TABLE, function (Blueprint $table) {
@@ -183,7 +188,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Kayıt son güncelleme tarihi');
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
-            $table->foreign('employee_id')->references('employee_id')->on(self::EMPLOYEE_TABLE)->cascadeOnDelete();
+            $table->index('employee_id');
         });
 
         Schema::create(self::EMPLOYEE_CONTACT_TABLE, function (Blueprint $table) {
@@ -219,8 +224,7 @@ return new class extends Migration
             $table->index('country_id');
             $table->index('city_id');
             $table->index('district_id');
-
-            $table->foreign('employee_id')->references('employee_id')->on(self::EMPLOYEE_TABLE)->cascadeOnDelete();
+            $table->index('employee_id');
         });
 
         Schema::create(self::EMPLOYEE_BANK_ACCOUNT_TABLE, function (Blueprint $table) {
@@ -252,8 +256,7 @@ return new class extends Migration
 
             $table->index('bank_id');
             $table->index('iban');
-
-            $table->foreign('employee_id')->references('employee_id')->on(self::EMPLOYEE_TABLE)->cascadeOnDelete();
+            $table->index('employee_id');
         });
 
         Schema::create(self::EMPLOYEE_DOCUMENT_TABLE, function (Blueprint $table) {
@@ -280,7 +283,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Kayıt son güncelleme tarihi');
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
-            $table->foreign('employee_id')->references('employee_id')->on(self::EMPLOYEE_TABLE)->cascadeOnDelete();
+            $table->index('employee_id');
         });
 
         Schema::create(self::CART_TABLE, function (Blueprint $table) {
@@ -397,8 +400,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('product_id');
-
-            $table->foreign('order_id')->references('order_id')->on(self::ORDER_TABLE)->cascadeOnDelete();
+            $table->index('order_id');
         });
 
         Schema::create(self::ORDER_FINANCIAL_TABLE, function (Blueprint $table) {
@@ -425,7 +427,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Kayıt son güncelleme tarihi');
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
-            $table->foreign('order_id')->references('order_id')->on(self::ORDER_TABLE)->cascadeOnDelete();
+            $table->index('order_id');
         });
 
         Schema::create(self::ORDER_CONTACT_TABLE, function (Blueprint $table) {
@@ -466,8 +468,7 @@ return new class extends Migration
             $table->index('country_id');
             $table->index('city_id');
             $table->index('district_id');
-
-            $table->foreign('order_id')->references('order_id')->on(self::ORDER_TABLE)->cascadeOnDelete();
+            $table->index('order_id');
         });
 
         Schema::create(self::ORDER_ACTIVITY_TABLE, function (Blueprint $table) {
@@ -493,8 +494,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('status_id');
-
-            $table->foreign('order_id')->references('order_id')->on(self::ORDER_TABLE)->cascadeOnDelete();
+            $table->index('order_id');
         });
 
         Schema::create(self::ORDER_SHIPMENT_TABLE, function (Blueprint $table) {
@@ -519,8 +519,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('cargo_id');
-
-            $table->foreign('order_id')->references('order_id')->on(self::ORDER_TABLE)->cascadeOnDelete();
+            $table->index('order_id');
         });
 
         Schema::create(self::ORDER_SHIPMENT_ITEM_TABLE, function (Blueprint $table) {
@@ -543,8 +542,8 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Kayıt son güncelleme tarihi');
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
-            $table->foreign('order_shipment_id')->references('order_shipment_id')->on(self::ORDER_SHIPMENT_TABLE)->cascadeOnDelete();
-            $table->foreign('order_item_id')->references('order_item_id')->on(self::ORDER_ITEM_TABLE)->cascadeOnDelete();
+            $table->index('order_shipment_id');
+            $table->index('order_item_id');
         });
 
         Schema::create(self::INVOICE_TABLE, function (Blueprint $table) {
@@ -590,8 +589,6 @@ return new class extends Migration
             $table->index('type_id');
             $table->index('account_id');
             $table->index('order_id');
-
-            $table->foreign('order_id')->references('order_id')->on(self::ORDER_TABLE)->nullOnDelete();
         });
 
         Schema::create(self::INVOICE_ITEM_TABLE, function (Blueprint $table) {
@@ -628,8 +625,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('product_id');
-
-            $table->foreign('invoice_id')->references('invoice_id')->on(self::INVOICE_TABLE)->cascadeOnDelete();
+            $table->index('invoice_id');
         });
 
         Schema::create(self::INVOICE_FINANCIAL_TABLE, function (Blueprint $table) {
@@ -654,7 +650,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Kayıt son güncelleme tarihi');
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
-            $table->foreign('invoice_id')->references('invoice_id')->on(self::INVOICE_TABLE)->cascadeOnDelete();
+            $table->index('invoice_id');
         });
 
         Schema::create(self::INVOICE_CONTACT_TABLE, function (Blueprint $table) {
@@ -693,8 +689,7 @@ return new class extends Migration
             $table->index('country_id');
             $table->index('city_id');
             $table->index('district_id');
-
-            $table->foreign('invoice_id')->references('invoice_id')->on(self::INVOICE_TABLE)->cascadeOnDelete();
+            $table->index('invoice_id');
         });
 
         Schema::create(self::REFUND_TABLE, function (Blueprint $table) {
@@ -804,31 +799,10 @@ return new class extends Migration
             $table->index('product_id');
         });
 
-        Schema::table(self::EMPLOYEE_TABLE, function (Blueprint $table) {
-            $table->foreign('default_contact_id')->references('employee_contact_id')->on(self::EMPLOYEE_CONTACT_TABLE)->nullOnDelete();
-            $table->foreign('default_bank_account_id')->references('employee_bank_account_id')->on(self::EMPLOYEE_BANK_ACCOUNT_TABLE)->nullOnDelete();
-        });
-
-        Schema::table(self::ORDER_TABLE, function (Blueprint $table) {
-            $table->foreign('payment_contact_id')->references('order_contact_id')->on(self::ORDER_CONTACT_TABLE)->nullOnDelete();
-            $table->foreign('shipping_contact_id')->references('order_contact_id')->on(self::ORDER_CONTACT_TABLE)->nullOnDelete();
-            $table->foreign('recurring_id')->references('recurring_id')->on(self::RECURRING_TABLE)->nullOnDelete();
-        });
     }
 
     public function down(): void
     {
-        Schema::table(self::ORDER_TABLE, function (Blueprint $table) {
-            $table->dropForeign(['payment_contact_id']);
-            $table->dropForeign(['shipping_contact_id']);
-            $table->dropForeign(['recurring_id']);
-        });
-
-        Schema::table(self::EMPLOYEE_TABLE, function (Blueprint $table) {
-            $table->dropForeign(['default_contact_id']);
-            $table->dropForeign(['default_bank_account_id']);
-        });
-
         Schema::dropIfExists(self::DEMAND_TABLE);
         Schema::dropIfExists(self::RECURRING_TABLE);
         Schema::dropIfExists(self::REFUND_TABLE);

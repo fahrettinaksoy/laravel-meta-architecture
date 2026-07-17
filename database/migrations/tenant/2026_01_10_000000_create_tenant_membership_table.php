@@ -102,7 +102,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Kayıt son güncelleme tarihi');
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
-            $table->foreign('account_id')->references('account_id')->on(self::ACCOUNT_TABLE)->cascadeOnDelete();
+            $table->index('account_id');
         });
 
         Schema::create(self::CONTACT_TABLE, function (Blueprint $table) {
@@ -144,8 +144,7 @@ return new class extends Migration
             $table->index('country_id');
             $table->index('city_id');
             $table->index('district_id');
-
-            $table->foreign('account_id')->references('account_id')->on(self::ACCOUNT_TABLE)->cascadeOnDelete();
+            $table->index('account_id');
         });
 
         Schema::create(self::BANK_ACCOUNT_TABLE, function (Blueprint $table) {
@@ -176,8 +175,7 @@ return new class extends Migration
 
             $table->index('bank_id');
             $table->index('iban');
-
-            $table->foreign('account_id')->references('account_id')->on(self::ACCOUNT_TABLE)->cascadeOnDelete();
+            $table->index('account_id');
         });
 
         Schema::create(self::DOWNLOAD_TABLE, function (Blueprint $table) {
@@ -201,8 +199,7 @@ return new class extends Migration
 
             $table->index('order_id');
             $table->index('download_id');
-
-            $table->foreign('account_id')->references('account_id')->on(self::ACCOUNT_TABLE)->cascadeOnDelete();
+            $table->index('account_id');
         });
 
         Schema::create(self::REWARD_TABLE, function (Blueprint $table) {
@@ -227,8 +224,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('order_id');
-
-            $table->foreign('account_id')->references('account_id')->on(self::ACCOUNT_TABLE)->cascadeOnDelete();
+            $table->index('account_id');
         });
 
         Schema::create(self::WISHLIST_TABLE, function (Blueprint $table) {
@@ -250,7 +246,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Kayıt son güncelleme tarihi');
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
-            $table->foreign('account_id')->references('account_id')->on(self::ACCOUNT_TABLE)->cascadeOnDelete();
+            $table->index('account_id');
         });
 
         Schema::create(self::WISHLIST_ITEM_TABLE, function (Blueprint $table) {
@@ -273,8 +269,6 @@ return new class extends Migration
 
             $table->unique(['account_wishlist_id', 'product_id'], 'uq_wishlist_item_list_product');
             $table->index('product_id');
-
-            $table->foreign('account_wishlist_id')->references('account_wishlist_id')->on(self::WISHLIST_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::PRICE_ALERT_TABLE, function (Blueprint $table) {
@@ -297,8 +291,6 @@ return new class extends Migration
 
             $table->unique(['account_id', 'product_id'], 'uq_price_alert_account_product');
             $table->index('product_id');
-
-            $table->foreign('account_id')->references('account_id')->on(self::ACCOUNT_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::PREORDER_TABLE, function (Blueprint $table) {
@@ -322,8 +314,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('product_id');
-
-            $table->foreign('account_id')->references('account_id')->on(self::ACCOUNT_TABLE)->cascadeOnDelete();
+            $table->index('account_id');
         });
 
         Schema::create(self::PASSWORD_RESET_TABLE, function (Blueprint $table) {
@@ -394,25 +385,12 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index(['account_id', 'channel'], 'idx_verification_account_channel');
-
-            $table->foreign('account_id')->references('account_id')->on(self::ACCOUNT_TABLE)->cascadeOnDelete();
         });
 
-        Schema::table(self::ACCOUNT_TABLE, function (Blueprint $table) {
-            $table->foreign('default_authorized_id')->references('account_authorized_id')->on(self::AUTHORIZED_TABLE)->nullOnDelete();
-            $table->foreign('default_contact_id')->references('account_contact_id')->on(self::CONTACT_TABLE)->nullOnDelete();
-            $table->foreign('default_bank_account_id')->references('account_bank_account_id')->on(self::BANK_ACCOUNT_TABLE)->nullOnDelete();
-        });
     }
 
     public function down(): void
     {
-        Schema::table(self::ACCOUNT_TABLE, function (Blueprint $table) {
-            $table->dropForeign(['default_authorized_id']);
-            $table->dropForeign(['default_contact_id']);
-            $table->dropForeign(['default_bank_account_id']);
-        });
-
         Schema::dropIfExists(self::VERIFICATION_TABLE);
         Schema::dropIfExists(self::TOKEN_ACCESS_TABLE);
         Schema::dropIfExists(self::PASSWORD_RESET_TABLE);

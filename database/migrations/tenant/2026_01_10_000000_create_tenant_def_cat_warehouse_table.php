@@ -42,8 +42,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('status');
-
-            $table->foreign('warehouse_id')->references('warehouse_id')->on(self::WAREHOUSE_TABLE)->cascadeOnDelete();
+            $table->index('warehouse_id');
         });
 
         Schema::create(self::AREA_TABLE, function (Blueprint $table) {
@@ -74,9 +73,8 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('status');
-
-            $table->foreign('warehouse_id')->references('warehouse_id')->on(self::WAREHOUSE_TABLE)->cascadeOnDelete();
-            $table->foreign('block_id')->references('block_id')->on(self::BLOCK_TABLE)->nullOnDelete();
+            $table->index('warehouse_id');
+            $table->index('block_id');
         });
 
         Schema::create(self::SHELF_TABLE, function (Blueprint $table) {
@@ -107,9 +105,8 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('status');
-
-            $table->foreign('warehouse_id')->references('warehouse_id')->on(self::WAREHOUSE_TABLE)->cascadeOnDelete();
-            $table->foreign('area_id')->references('area_id')->on(self::AREA_TABLE)->nullOnDelete();
+            $table->index('warehouse_id');
+            $table->index('area_id');
         });
     }
 

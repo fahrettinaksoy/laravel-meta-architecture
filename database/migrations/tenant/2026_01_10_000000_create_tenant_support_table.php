@@ -74,8 +74,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['faq_group_id', 'language_code'], 'uq_faq_group_translation_lang');
-
-            $table->foreign('faq_group_id')->references('faq_group_id')->on(self::FAQ_GROUP_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::FAQ_TABLE, function (Blueprint $table) {
@@ -122,8 +120,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['faq_id', 'language_code'], 'uq_faq_translation_lang');
-
-            $table->foreign('faq_id')->references('faq_id')->on(self::FAQ_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::FAQ_FAQ_GROUP_TABLE, function (Blueprint $table) {
@@ -146,9 +142,6 @@ return new class extends Migration
 
             $table->unique(['faq_id', 'faq_group_id'], 'uq_faq_faq_group');
             $table->index('faq_group_id');
-
-            $table->foreign('faq_id')->references('faq_id')->on(self::FAQ_TABLE)->cascadeOnDelete();
-            $table->foreign('faq_group_id')->references('faq_group_id')->on(self::FAQ_GROUP_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::KNOWLEDGE_CATEGORY_TABLE, function (Blueprint $table) {
@@ -176,8 +169,6 @@ return new class extends Migration
 
             $table->index('parent_id');
             $table->index('status');
-
-            $table->foreign('parent_id')->references('knowledge_category_id')->on(self::KNOWLEDGE_CATEGORY_TABLE)->nullOnDelete();
         });
 
         Schema::create(self::KNOWLEDGE_CATEGORY_TRANSLATION_TABLE, function (Blueprint $table) {
@@ -205,8 +196,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['knowledge_category_id', 'language_code'], 'uq_knowledge_category_translation_lang');
-
-            $table->foreign('knowledge_category_id')->references('knowledge_category_id')->on(self::KNOWLEDGE_CATEGORY_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::KNOWLEDGE_ARTICLE_TABLE, function (Blueprint $table) {
@@ -262,8 +251,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['knowledge_article_id', 'language_code'], 'uq_knowledge_article_translation_lang');
-
-            $table->foreign('knowledge_article_id')->references('knowledge_article_id')->on(self::KNOWLEDGE_ARTICLE_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::KNOWLEDGE_ARTICLE_CATEGORY_TABLE, function (Blueprint $table) {
@@ -286,9 +273,6 @@ return new class extends Migration
 
             $table->unique(['knowledge_article_id', 'knowledge_category_id'], 'uq_knowledge_article_category');
             $table->index('knowledge_category_id');
-
-            $table->foreign('knowledge_article_id')->references('knowledge_article_id')->on(self::KNOWLEDGE_ARTICLE_TABLE)->cascadeOnDelete();
-            $table->foreign('knowledge_category_id')->references('knowledge_category_id')->on(self::KNOWLEDGE_CATEGORY_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::KNOWLEDGE_ARTICLE_IMAGE_TABLE, function (Blueprint $table) {
@@ -310,7 +294,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Kayıt son güncelleme tarihi');
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
-            $table->foreign('knowledge_article_id')->references('knowledge_article_id')->on(self::KNOWLEDGE_ARTICLE_TABLE)->cascadeOnDelete();
+            $table->index('knowledge_article_id');
         });
 
         Schema::create(self::KNOWLEDGE_ARTICLE_VIDEO_TABLE, function (Blueprint $table) {
@@ -334,7 +318,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Kayıt son güncelleme tarihi');
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
-            $table->foreign('knowledge_article_id')->references('knowledge_article_id')->on(self::KNOWLEDGE_ARTICLE_TABLE)->cascadeOnDelete();
+            $table->index('knowledge_article_id');
         });
 
         Schema::create(self::KNOWLEDGE_ARTICLE_RELATED_TABLE, function (Blueprint $table) {
@@ -357,9 +341,6 @@ return new class extends Migration
 
             $table->unique(['knowledge_article_id', 'related_article_id'], 'uq_knowledge_article_related');
             $table->index('related_article_id');
-
-            $table->foreign('knowledge_article_id')->references('knowledge_article_id')->on(self::KNOWLEDGE_ARTICLE_TABLE)->cascadeOnDelete();
-            $table->foreign('related_article_id')->references('knowledge_article_id')->on(self::KNOWLEDGE_ARTICLE_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::FEEDBACK_TABLE, function (Blueprint $table) {
@@ -392,9 +373,8 @@ return new class extends Migration
 
             $table->index('assistant_id');
             $table->index('department_id');
-
-            $table->foreign('priority_id')->references('priority_id')->on(self::PRIORITY_TABLE)->nullOnDelete();
-            $table->foreign('status_id')->references('feedback_status_id')->on(self::FEEDBACK_STATUS_TABLE)->nullOnDelete();
+            $table->index('priority_id');
+            $table->index('status_id');
         });
 
         Schema::create(self::TICKET_TABLE, function (Blueprint $table) {
@@ -427,10 +407,8 @@ return new class extends Migration
             $table->index('assistant_id');
             $table->index('department_id');
             $table->index('status_id');
-
-            $table->foreign('priority_id')->references('priority_id')->on(self::PRIORITY_TABLE)->nullOnDelete();
-            $table->foreign('relation_id')->references('relation_id')->on(self::RELATION_TABLE)->nullOnDelete();
-            $table->foreign('status_id')->references('ticket_status_id')->on(self::TICKET_STATUS_TABLE)->nullOnDelete();
+            $table->index('priority_id');
+            $table->index('relation_id');
         });
 
         Schema::create(self::TICKET_MESSAGE_TABLE, function (Blueprint $table) {
@@ -456,8 +434,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('account_id');
-
-            $table->foreign('ticket_id')->references('ticket_id')->on(self::TICKET_TABLE)->cascadeOnDelete();
+            $table->index('ticket_id');
         });
     }
 

@@ -10,6 +10,7 @@ return new class extends Migration
 
     private const CATEGORY_TABLE = 'cnt_category';
     private const CATEGORY_TRANSLATION_TABLE = 'cnt_category_translation';
+
     private const POST_TABLE = 'cnt_post';
     private const POST_TRANSLATION_TABLE = 'cnt_post_translation';
     private const POST_CATEGORY_TABLE = 'cnt_post_category';
@@ -17,7 +18,9 @@ return new class extends Migration
     private const POST_VIDEO_TABLE = 'cnt_post_video';
     private const POST_RELATED_TABLE = 'cnt_post_related';
     private const POST_PRODUCT_TABLE = 'cnt_post_product';
+
     private const COMMENT_TABLE = 'cnt_comment';
+
     private const PAGE_TABLE = 'cnt_page';
     private const PAGE_TRANSLATION_TABLE = 'cnt_page_translation';
     private const PAGE_IMAGE_TABLE = 'cnt_page_image';

@@ -60,8 +60,6 @@ return new class extends Migration
 
             $table->unique(['method_group_id', 'code'], 'uq_method_type_group_code');
             $table->index('status');
-
-            $table->foreign('method_group_id')->references('method_group_id')->on(self::METHOD_GROUP_TABLE)->nullOnDelete();
         });
 
         Schema::create(self::PLUGIN_GROUP_TABLE, function (Blueprint $table) {
@@ -108,8 +106,6 @@ return new class extends Migration
 
             $table->unique(['plugin_group_id', 'code'], 'uq_plugin_type_group_code');
             $table->index('status');
-
-            $table->foreign('plugin_group_id')->references('plugin_group_id')->on(self::PLUGIN_GROUP_TABLE)->nullOnDelete();
         });
 
         Schema::create(self::WIDGET_TYPE_TABLE, function (Blueprint $table) {

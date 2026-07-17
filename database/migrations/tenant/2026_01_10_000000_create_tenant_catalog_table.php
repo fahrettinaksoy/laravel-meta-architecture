@@ -11,7 +11,9 @@ return new class extends Migration
 
     private const DOWNLOAD_TABLE = 'cat_download';
     private const DOWNLOAD_TRANSLATION_TABLE = 'cat_download_translation';
+
     private const WAREHOUSE_TABLE = 'cat_warehouse';
+
     private const PRODUCT_TABLE = 'cat_product';
     private const PRODUCT_STAT_TABLE = 'cat_product_stat';
     private const PRODUCT_TRANSLATION_TABLE = 'cat_product_translation';
@@ -39,6 +41,7 @@ return new class extends Migration
     private const PRODUCT_RECURRING_TABLE = 'cat_product_recurring';
     private const PRODUCT_DOCUMENT_TABLE = 'cat_product_document';
     private const PRODUCT_DOCUMENT_TRANSLATION_TABLE = 'cat_product_document_translation';
+
     private const REVIEW_TABLE = 'cat_review';
 
     public function up(): void

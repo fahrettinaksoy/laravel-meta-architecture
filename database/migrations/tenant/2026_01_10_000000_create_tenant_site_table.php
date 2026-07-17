@@ -68,8 +68,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['layout_id', 'position'], 'uq_layout_widget_position');
-
-            $table->foreign('layout_id')->references('layout_id')->on(self::LAYOUT_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::BANNER_TABLE, function (Blueprint $table) {
@@ -126,8 +124,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index(['banner_id', 'language_code'], 'idx_banner_item_banner_lang');
-
-            $table->foreign('banner_id')->references('banner_id')->on(self::BANNER_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::MENU_TABLE, function (Blueprint $table) {
@@ -186,9 +182,7 @@ return new class extends Migration
 
             $table->index('parent_id');
             $table->index('status');
-
-            $table->foreign('menu_id')->references('menu_id')->on(self::MENU_TABLE)->cascadeOnDelete();
-            $table->foreign('parent_id')->references('menu_item_id')->on(self::MENU_ITEM_TABLE)->nullOnDelete();
+            $table->index('menu_id');
         });
 
         Schema::create(self::MENU_ITEM_TRANSLATION_TABLE, function (Blueprint $table) {
@@ -212,8 +206,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['menu_item_id', 'language_code'], 'uq_menu_item_translation_lang');
-
-            $table->foreign('menu_item_id')->references('menu_item_id')->on(self::MENU_ITEM_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::URL_TABLE, function (Blueprint $table) {
@@ -267,8 +259,6 @@ return new class extends Migration
 
             $table->unique(['url_id', 'language_code'], 'uq_url_translation_lang');
             $table->unique(['language_code', 'keyword'], 'uq_url_translation_keyword');
-
-            $table->foreign('url_id')->references('url_id')->on(self::URL_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::FORM_TABLE, function (Blueprint $table) {
@@ -318,8 +308,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['form_id', 'language_code'], 'uq_form_translation_lang');
-
-            $table->foreign('form_id')->references('form_id')->on(self::FORM_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::FORM_SUBMISSION_TABLE, function (Blueprint $table) {
@@ -342,7 +330,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Kayıt son güncelleme tarihi');
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
-            $table->foreign('form_id')->references('form_id')->on(self::FORM_TABLE)->cascadeOnDelete();
+            $table->index('form_id');
         });
     }
 

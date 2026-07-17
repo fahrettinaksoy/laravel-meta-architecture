@@ -133,8 +133,7 @@ return new class extends Migration
 
             $table->index('domain_address');
             $table->index('status');
-
-            $table->foreign('account_id')->references('account_id')->on(self::ACCOUNT_TABLE)->nullOnDelete();
+            $table->index('account_id');
         });
 
         Schema::create(self::ACCOUNT_ACCESS_TRANSLATION_TABLE, function (Blueprint $table) {
@@ -168,8 +167,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['account_access_id', 'language_code'], 'uq_account_access_translation_lang');
-
-            $table->foreign('account_access_id')->references('account_access_id')->on(self::ACCOUNT_ACCESS_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::ACCOUNT_AUTHORIZED_TABLE, function (Blueprint $table) {
@@ -208,9 +205,8 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('status');
-
-            $table->foreign('account_id')->references('account_id')->on(self::ACCOUNT_TABLE)->nullOnDelete();
-            $table->foreign('account_access_id')->references('account_access_id')->on(self::ACCOUNT_ACCESS_TABLE)->nullOnDelete();
+            $table->index('account_id');
+            $table->index('account_access_id');
         });
 
         Schema::create(self::ACCOUNT_AUTHORIZED_TOKEN_RESET_TABLE, function (Blueprint $table) {
@@ -279,7 +275,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Kayıt son güncelleme tarihi');
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
-            $table->foreign('account_authorized_id')->references('account_authorized_id')->on(self::ACCOUNT_AUTHORIZED_TABLE)->cascadeOnDelete();
+            $table->index('account_authorized_id');
         });
 
         Schema::create(self::ACCOUNT_CONTACT_TABLE, function (Blueprint $table) {
@@ -321,8 +317,7 @@ return new class extends Migration
             $table->index('country_id');
             $table->index('city_id');
             $table->index('district_id');
-
-            $table->foreign('account_id')->references('account_id')->on(self::ACCOUNT_TABLE)->cascadeOnDelete();
+            $table->index('account_id');
         });
 
         Schema::create(self::ACCOUNT_BANK_ACCOUNT_TABLE, function (Blueprint $table) {
@@ -353,25 +348,13 @@ return new class extends Migration
 
             $table->index('bank_id');
             $table->index('iban');
-
-            $table->foreign('account_id')->references('account_id')->on(self::ACCOUNT_TABLE)->cascadeOnDelete();
+            $table->index('account_id');
         });
 
-        Schema::table(self::ACCOUNT_TABLE, function (Blueprint $table) {
-            $table->foreign('default_authorized_id')->references('account_authorized_id')->on(self::ACCOUNT_AUTHORIZED_TABLE)->nullOnDelete();
-            $table->foreign('default_contact_id')->references('account_contact_id')->on(self::ACCOUNT_CONTACT_TABLE)->nullOnDelete();
-            $table->foreign('default_bank_account_id')->references('account_bank_account_id')->on(self::ACCOUNT_BANK_ACCOUNT_TABLE)->nullOnDelete();
-        });
     }
 
     public function down(): void
     {
-        Schema::table(self::ACCOUNT_TABLE, function (Blueprint $table) {
-            $table->dropForeign(['default_authorized_id']);
-            $table->dropForeign(['default_contact_id']);
-            $table->dropForeign(['default_bank_account_id']);
-        });
-
         Schema::dropIfExists(self::ACCOUNT_BANK_ACCOUNT_TABLE);
         Schema::dropIfExists(self::ACCOUNT_CONTACT_TABLE);
         Schema::dropIfExists(self::ACCOUNT_SMS_VERIFY_TABLE);

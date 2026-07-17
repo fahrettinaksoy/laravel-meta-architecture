@@ -93,7 +93,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Kayıt son güncelleme tarihi');
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
-            $table->foreign('account_id')->references('account_id')->on(self::ACCOUNT_TABLE)->cascadeOnDelete();
+            $table->index('account_id');
         });
 
         Schema::create(self::CONTACT_TABLE, function (Blueprint $table) {
@@ -135,8 +135,7 @@ return new class extends Migration
             $table->index('country_id');
             $table->index('city_id');
             $table->index('district_id');
-
-            $table->foreign('account_id')->references('account_id')->on(self::ACCOUNT_TABLE)->cascadeOnDelete();
+            $table->index('account_id');
         });
 
         Schema::create(self::BANK_ACCOUNT_TABLE, function (Blueprint $table) {
@@ -167,25 +166,13 @@ return new class extends Migration
 
             $table->index('bank_id');
             $table->index('iban');
-
-            $table->foreign('account_id')->references('account_id')->on(self::ACCOUNT_TABLE)->cascadeOnDelete();
+            $table->index('account_id');
         });
 
-        Schema::table(self::ACCOUNT_TABLE, function (Blueprint $table) {
-            $table->foreign('default_authorized_id')->references('account_authorized_id')->on(self::AUTHORIZED_TABLE)->nullOnDelete();
-            $table->foreign('default_contact_id')->references('account_contact_id')->on(self::CONTACT_TABLE)->nullOnDelete();
-            $table->foreign('default_bank_account_id')->references('account_bank_account_id')->on(self::BANK_ACCOUNT_TABLE)->nullOnDelete();
-        });
     }
 
     public function down(): void
     {
-        Schema::table(self::ACCOUNT_TABLE, function (Blueprint $table) {
-            $table->dropForeign(['default_authorized_id']);
-            $table->dropForeign(['default_contact_id']);
-            $table->dropForeign(['default_bank_account_id']);
-        });
-
         Schema::dropIfExists(self::BANK_ACCOUNT_TABLE);
         Schema::dropIfExists(self::CONTACT_TABLE);
         Schema::dropIfExists(self::AUTHORIZED_TABLE);

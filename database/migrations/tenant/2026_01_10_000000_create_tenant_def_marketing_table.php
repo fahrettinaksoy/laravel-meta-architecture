@@ -60,8 +60,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['campaign_type_id', 'language_code'], 'uq_campaign_type_translation_lang');
-
-            $table->foreign('campaign_type_id')->references('campaign_type_id')->on(self::CAMPAIGN_TYPE_TABLE)->cascadeOnDelete();
         });
 
         Schema::create(self::GIFT_VOUCHER_THEME_TABLE, function (Blueprint $table) {
@@ -108,8 +106,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['gift_voucher_theme_id', 'language_code'], 'uq_gift_voucher_theme_translation_lang');
-
-            $table->foreign('gift_voucher_theme_id')->references('gift_voucher_theme_id')->on(self::GIFT_VOUCHER_THEME_TABLE)->cascadeOnDelete();
         });
     }
 

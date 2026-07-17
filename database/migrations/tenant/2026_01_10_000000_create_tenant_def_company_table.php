@@ -76,8 +76,7 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->index('status');
-
-            $table->foreign('branch_id')->references('branch_id')->on(self::BRANCH_TABLE)->nullOnDelete();
+            $table->index('branch_id');
         });
 
         Schema::create(self::DEPARTMENT_TRANSLATION_TABLE, function (Blueprint $table) {
@@ -101,8 +100,6 @@ return new class extends Migration
             $table->timestamp('deleted_at')->nullable()->comment('Yumuşak silme tarihi: null ise kayıt aktif');
 
             $table->unique(['department_id', 'language_code'], 'uq_department_translation_lang');
-
-            $table->foreign('department_id')->references('department_id')->on(self::DEPARTMENT_TABLE)->cascadeOnDelete();
         });
     }
 
